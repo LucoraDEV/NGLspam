@@ -13,16 +13,18 @@ except Exception as e:
     exit()
 
 # Demander le mode d'envoi
-mode = input("Choisissez le mode d'envoi (normal/slow) : ").strip().lower()
-if mode not in ["normal", "slow"]:
-    print("Mode invalide. Veuillez choisir 'normal' ou 'slow'.")
+mode = input("Choisissez le mode d'envoi (normal/slow/extra_slow) : ").strip().lower()
+if mode not in ["normal", "slow", "extra_slow"]:
+    print("Mode invalide. Veuillez choisir 'normal', 'slow' ou 'extra_slow'.")
     exit()
 
 # Définir le délai en fonction du mode
 if mode == "normal":
     delay_min, delay_max = 0.2, 1.2
-else:
+elif mode == "slow":
     delay_min, delay_max = 4.0, 5.0
+else:
+    delay_min, delay_max = 15.0, 25.0  # Mode extra slow
 
 # Demander le nom d'utilisateur
 username = input("Entrez le nom d'utilisateur NGL : ")
@@ -48,39 +50,8 @@ messages = [
     "Les lumières du couloir sont restées allumées toute la journée… EDF vous remercie 💸.",
     "Les casiers du premier étage étaient tous fermés 😭. Quelqu’un a crié 'contrôle surprise' ou quoi ?",
     "Les tables du foyer étaient encore sales, comme si un goûter apocalypse avait eu lieu 😂.",
-    "Le tableau du hall avait de nouvelles affiches… encore un club chelou qui se lance ?",
-    "Les ballons de sport étaient encore dehors mdrr, ils partent faire leur vie sans nous ?",
-    "Les portes de l’amphithéâtre étaient ouvertes… répétition secrète ou oubli ? 🤨",
-    "Le CDI n'a pas ouvert cet après-midi… la doc a ghosté l'école ? 😂",
-    "Les escaliers étaient vides à la fin des cours… tout le monde a sprint pour le bus ? 💀",
-    "Les bancs sous le préau étaient mouillés… quelqu'un a pleuré sa vie ou quoi ? 😂",
-    "Les carnets de liaison ont été vérifiés en classe… qui a encore pris une heure de colle ? 🤷‍♀️",
-    "Le baby-foot au foyer n’a toujours pas été réparé mdrr, c’est un projet sur 10 ans ou quoi ?",
-    "Les couloirs étaient calmes ce matin… soit c’est la paix, soit un truc se prépare 😶.",
-    "Les ordinateurs de la salle info étaient éteints… hacké par un sixième ou juste la flemme ? 😂",
-    "Le club de dessin n’a pas eu lieu aujourd’hui… les artistes sont en grève ? 🎨",
-    "Apparemment y’a eu embrouille devant le foyer… quelqu’un a les détails ? 👀",
-    "Untel et unetelle se sont encore disputés ptdr, c’est la série Netflix en direct.",
-    "Quelqu’un a vu qui est arrivé en retard ce matin ? C’était le défilé mdrr.",
-    "La prof de maths a rendu les contrôles… et ça pique fort 💀.",
-    "Il paraît que quelqu’un a changé la musique sur l’enceinte du foyer en plein milieu… respect 😂.",
-    "Le surveillant a confisqué un téléphone… encore un qui pensait être discret 💀.",
-    "Les stores de la salle 204 sont encore bloqués… ça fait ambiance grotte mdrr.",
-    "Y’a eu un cri chelou dans le couloir pendant les cours… c’était un prank ou quoi ? 😭",
-    "Qui a encore oublié son sac devant le portail ? Il est là depuis ce matin ptdr.",
-    "Y’a un prof qui s’est embrouillé avec un élève en plein cours… malaise général 💀.",
-    "Quelqu’un a mis un post-it 'en panne' sur la fontaine à eau… c’est du troll pur 😂.",
-    "Y’a un pull qui traîne sur un banc depuis hier… c’est à qui, sérieusement ?",
-    "Le micro du gymnase grésille encore mdrr, on dirait un vieux talkie-walkie.",
-    "La machine à café des profs est encore cassée… ils vont être en PLS aujourd’hui 😂.",
-    "Il paraît que le foyer va fermer plus tôt cette semaine… qui a encore abusé ? 💀",
-    "Quelqu’un a mis des faux insectes dans la salle de SVT… la prof a hurlé mdrr.",
-    "Les trottinettes sont encore alignées comme des dominos devant le portail 😂.",
-    "Le self était en rupture de dessert à 12h10… la guerre des premiers servis continue 💪.",
-    "Y’a un sixième qui a essayé de rentrer en cours de troisième comme si de rien n’était mdrr.",
-    "La prof principale a fait un speech de 10 min… pour dire qu’il fallait ranger son casier 💀."
+    "Le tableau du hall avait de nouvelles affiches… encore un club chelou qui se lance ?"
 ]
-
 
 # Générer le premier device ID
 device_id = str(uuid.uuid4())
@@ -89,10 +60,13 @@ print("Device ID initial :", device_id)
 def envoyer_message(compteur):
     global device_id
 
-    # Changer l'UUID toutes les 5 itérations
-    if compteur % 5 == 0:
+    # Changer l'UUID à chaque message si mode extra slow
+    if mode == "extra_slow":
         device_id = str(uuid.uuid4())
-        print(f"NEW Device ID : {device_id}")
+        print(f"NEW Device ID (extra slow) : {device_id}")
+    elif compteur % 5 == 0:
+        device_id = str(uuid.uuid4())
+        print(f"NEW Device ID (normal/slow) : {device_id}")
 
     message = random.choice(messages)
 
